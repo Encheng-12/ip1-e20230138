@@ -2,7 +2,7 @@
 
 ## 1. Project Overview
 
-The Rental Room Management System is a web application that helps tenants find rooms for rent and allows landlords to manage room listings and rental requests. Tenants can browse available rooms, search for rooms within their budget, submit rental requests, and track their rental status. Landlords can create, view, update, and delete room listings, manage rental requests, and track room availability.
+The Rental Room Management System is a web application that helps tenants find rooms for rent and allows landlords to manage room listings and rental requests. Tenants can browse available rooms, search for rooms within their budget, submit rental requests, track their rental status, view invoices, and report issues in their room. Landlords can create, view, update, and delete room listings, manage rental requests, track room availability, record payments, and handle tenant issues.
 
 ## 2. User Roles
 
@@ -14,6 +14,8 @@ The Rental Room Management System is a web application that helps tenants find r
 - View their own rental requests.
 - Check rental request status.
 - View their own rental records.
+- View their own invoices and payment status.
+- Report issues about their room and track their status.
 
 ### Landlord
 
@@ -24,6 +26,8 @@ The Rental Room Management System is a web application that helps tenants find r
 - View rental requests for their rooms.
 - Approve or reject rental requests.
 - Manage room availability and rental records.
+- Create invoices and mark them as paid.
+- View and update tenant issues for their rooms.
 
 ## 3. User Stories and Acceptance Criteria
 
@@ -69,7 +73,8 @@ Acceptance criteria:
 
 - The user can enter their email address and password.
 - Valid credentials allow the user to log in.
-- Invalid credentials display an error message.
+- Invalid credentials display the error message "Email or password is incorrect".
+- An empty field displays "Email is required" or "Password is required".
 - The system uses JWT authentication to protect restricted pages and API endpoints.
 - Users cannot access features that their roles are not permitted to use.
 
@@ -124,12 +129,40 @@ Acceptance criteria:
 - The system prevents unauthorized users from managing another landlord's rental requests.
 - The room's availability is updated appropriately when a rental is confirmed.
 
+### US-09: View and Manage Invoices
+
+As a tenant, I want to see my invoices so that I know what I owe. As a landlord, I want to record payments so that I can track unpaid rent.
+
+Acceptance criteria:
+
+- The tenant sees only their own invoices, newest first.
+- Each invoice shows the month, rent, utilities, total, and status (Paid, Unpaid, Overdue).
+- The landlord can create an invoice for a tenant and a month.
+- The landlord can mark an invoice as Paid, and the status is saved to the database.
+- The landlord dashboard shows the number of unpaid invoices.
+
+### US-10: Report and Handle Issues
+
+As a tenant, I want to report a problem in my room so that my landlord can fix it. As a landlord, I want to update issue status so that tenants know the progress.
+
+Acceptance criteria:
+
+- The tenant must enter a title (required, maximum 80 characters), a category, and a description.
+- An empty title displays "Title is required".
+- A new issue is saved with the status Open and appears in the tenant's issue list.
+- The landlord sees issues for their own rooms only.
+- The landlord can set the status to Open, In progress, or Resolved.
+
 ## 4. Main Entities
 
 - **User:** Stores user information, email address, password hash, and role.
 - **Room:** Stores room information, address, monthly rental price, availability status, and landlord.
 - **Rental:** Stores rental requests and rental records, including the associated tenant, room, dates, and status.
+- **Invoice:** Stores the month, rent, utilities, total, status, and the related rental.
+- **Issue:** Stores the title, category, description, status, and the related room and tenant.
+
+Main relations: one Landlord has many Rooms, one Room has many Rentals, and one Rental has many Invoices.
 
 ## 5. Project Scope
 
-The first version focuses on room listings, room search and filtering, rental requests, and rental management. Authentication, role-based access control, database integration, backend validation, pagination, and automated testing will be implemented progressively during the semester using Vue 3, TypeScript, NestJS, PostgreSQL, and Prisma.
+The first version focuses on room listings, room search and filtering, rental requests, rental management, invoices, and issue reporting. Authentication, role-based access control, database integration, backend validation, pagination, and automated testing will be implemented progressively during the semester using Vue 3, TypeScript, NestJS, PostgreSQL, and Prisma.
